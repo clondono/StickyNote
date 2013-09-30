@@ -11,7 +11,7 @@
  *= require_self
  *= require_tree .
  *= boostrap-responsive
- *= boostraps
+ *= boostrap
  *= boostrap_and_overrides
  *= stickyNotes
  */
