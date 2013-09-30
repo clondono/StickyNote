@@ -10,6 +10,9 @@
  *
  *= require_self
  *= require_tree .
+ *= boostrap-responsive
+ *= boostraps
+ *= boostrap_and_overrides
  */
 
 #header_bar{

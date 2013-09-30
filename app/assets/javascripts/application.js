@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+//= bootstrap
 Note = function(title,message,tableId, lastX,lastY) {
 	this._TITLE = "Example Title";
 	this._MESSAGE = "Example message";
@@ -80,17 +81,23 @@ Note = function(title,message,tableId, lastX,lastY) {
 
 	this._setOnClicks = function() {
 		that._closeButton.onclick = function() {
-			$('#'+that._noteId).remove();
-			Ajax.Request('<%= tile_update_path %>');
+			var url = "/posts/"+that._tableId;
+			var type = 'DELETE';
+			$.ajax('#'+that._noteId).remove();
+
 		};
 
 		$(that._newButton).click(function () {
-			//TODO: create new post
+			var url = "/posts/new/";
+			var type = 'GET';
+
 			Note(that._TITLE,that._MESSAGE, that._top+10,that._left+10);
 		});
 		
 		$(that._saveButton).click(function () {
 			//SAVE
+			var url = "/posts/"+that._tableId+'edit';
+			var type = 'GET';
 		});
 	
 	}
