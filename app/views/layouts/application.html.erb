@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html >
 	<head>
-	  <title>
-	  	StickyNote
-	  </title>
-	  <%= stylesheet_link_tag    "application", :media => "all" %>
-	  <%= stylesheet_link_tag    "bootstrap", :media => "all" %>
-	  <%= stylesheet_link_tag    "bootstrap_and_overrides", :media => "all" %>
-	  <%= stylesheet_link_tag    "stickyNotes", :media => "all" %>
+		<title>
+			StickyNote
+		</title>
+		<%= stylesheet_link_tag    "application", :media => "all" %>
+		<%= stylesheet_link_tag    "bootstrap", :media => "all" %>
+		<%= stylesheet_link_tag    "bootstrap_and_overrides", :media => "all" %>
+		<%= stylesheet_link_tag    "stickyNotes", :media => "all" %>
+
+		<%= javascript_include_tag "bootstrap" %>
+		<%= javascript_include_tag "application" %>
 
 
-	  <%= javascript_include_tag "bootstrap" %>
-	  <%= javascript_include_tag "application" %>
+		<%= csrf_meta_tags %>
+		<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	 	<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 
-
-	  <%= csrf_meta_tags %>
-	  <script src="http://code.jquery.com/jquery.js"></script>
+	 	<script>
+			//makes all notes draggable
+		  	$(function() {
+		    	$( ".note" ).draggable();
+		  	});
+		</script>
 
 	</head>
 	<body >
@@ -53,21 +61,14 @@
 
 		</div>
 	
-		<div class="row-fluid">
+		<div class="row-fluid" style="height:100%">
 			<div class="span2" id="side-bar">
 			</div>
-			<div class="span10" style="margin:0px;padding:0px">
-				<div style="margin:0px" id = "mainThing">
+			<div class="span10" style="margin:0px;padding:0px;height:100%">
+				<div style="margin:0px;height:100%;width:100%" id = "mainThing">
 					<%= yield %>
 				</div>
 			</div>
 		</div>
-		<div class="push"><!--//--></div>
-		</div>
-		<footer style="background-color:white">
-      <div class="container">
-        <p>6.170 Project</p>
-      </div>
-    </footer>
 	</body>
 </html>

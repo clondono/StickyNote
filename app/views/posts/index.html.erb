@@ -1,15 +1,16 @@
 
 
-<script type="text/javascript">showNotes("title","this is my message", 100,200)</script>
+<script type="text/javascript"> Note("Example Title","Example message")</script>
 
-<!--
+
 <% @posts.each do |post| %>
-  <tr>
-    <td><%= post.title %></td>
-    <td><%= post.content %></td>
-    <td><%= link_to 'Show', post %></td>
+	<script type="text/javascript">
+		Note("<%= j post.title %>","<%= post.content %>", <%= post.id%>, <%= post.lastX %>, <%= post.lastY %>)</script>
+	    
+
+	<td><%= link_to 'Show', post %></td>
     <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to '', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
 <% end %>
 </table>
