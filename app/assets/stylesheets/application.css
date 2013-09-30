@@ -10,9 +10,9 @@
  *
  *= require_self
  *= require_tree .
- *= boostrap-responsive
- *= boostrap
- *= boostrap_and_overrides
+ *= bootstrap-responsive
+ *= bootstrap
+ *= bootstrap_and_overrides
  *= stickyNotes
  */
 
