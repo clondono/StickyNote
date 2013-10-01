@@ -1,20 +1,12 @@
 
 
-<script type="text/javascript"> Note("Example Title","Example message")</script>
+<!--create a sample note that never disappears so users always see it-->
+<script type="text/javascript"> new Note("Example Title","Example message")</script>
 
-
+<!-- iterates through the posts and creates post its for all the posts in db-->
 <% @posts.each do |post| %>
 	<script type="text/javascript">
-		Note("<%= j post.title %>","<%= post.content %>", <%= post.id%>, <%= post.lastX %>, <%= post.lastY %>)</script>
-	    
-
-	<td><%= link_to 'Show', post %></td>
-    <td><%= link_to 'Edit', edit_post_path(post) %></td>
-    <td><%= link_to 'Delete', post, method: :delete, :remote => true, data: { confirm: 'Are you sure?' } %></td>
-  </tr>
-<% end %>
+		new Note("<%= j post.title %>","<%= post.content %>", <%= post.id%>, <%= post.lastX %>, <%= post.lastY %>)</script>   
+	<% end %>
 </table>
 <br />
-
-<%= link_to 'New Post', new_post_path %>
--->

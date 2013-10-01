@@ -29,6 +29,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @post }
+      format.js { render json: @post}
     end
   end
 
@@ -44,11 +45,13 @@ class PostsController < ApplicationController
 
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
         format.json { render json: @post, status: :created, location: @post }
+
       else
         format.html { render action: "new" }
         format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.js { render json: @post.errors, status: :unprocessable_entity }
+
       end
     end
   end
@@ -78,6 +81,7 @@ class PostsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to posts_url }
       format.json { head :no_content }
+      formate.js { head :no_content}
     end
   end
 end
