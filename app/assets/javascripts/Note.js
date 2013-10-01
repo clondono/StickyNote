@@ -6,12 +6,12 @@ Note = function(title,message,tableId, lastX,lastY) {
 	this._closeText = "x";
 	this._saveText = "save";
 	this._newText = "+";
-	this._top = 0;
-	this._left = 0;
+	this._top = 192;
+	this._left = 221;
 	this._noteId = "TestNote";
 	this._tableId = undefined;
 	if(typeof tableId !== "undefined") {
-		this._noteId = "Note"+tableId;
+		this._noteId = "Note" + tableId;
 		this._tableId = tableId;
 	}
 
@@ -20,7 +20,7 @@ Note = function(title,message,tableId, lastX,lastY) {
 	}
 
 	if(typeof lastY !== "undefined") {
-		this._top=lastY;
+		this._top = lastY;
 	}
 
 
@@ -44,9 +44,13 @@ Note = function(title,message,tableId, lastX,lastY) {
 	$(this._saveButton).addClass("noteButton noteSave");
 
 	this._note.id = this._noteId;
-	if(that._noteId !== 'TestNote') {
-		$(this._note).draggable();
-	}	
+ 	console.log($(that._top));
+ 	console.log($(that._left));
+
+	$(this._note).css({top: that._top, left: that._left});
+
+ 	console.log($(that._note).offset().top);
+ 	console.log($(that._note).offset().left);
 
 	this._mainBody.appendChild(this._note);
 	this._contentDiv.appendChild(this._noteTitle);
@@ -62,6 +66,18 @@ Note = function(title,message,tableId, lastX,lastY) {
 	this._saveButton.innerText = this._saveText;
 	this._newButton.id = 'NEWBUTTON';
 
+	this._saveNoteInfo = function() {
+						//Updates post object to represent what is in title and message
+				var urlLink = "/posts/"+that._tableId;
+				var typeLink = 'PUT';
+				$.ajax({
+					url:urlLink, 
+					type:typeLink,
+					data: { post:{'title': that._noteTitle.value, 'content': that._noteText.value, 'lastX': that._left, 'lastY': that._top}},
+					success: function(data){
+					}
+				});
+	};
 	//sets all the ajax requests to create delete and update notes
 	this._setOnClicks = function() {
 		that._newButton.onclick = function () {
@@ -70,10 +86,10 @@ Note = function(title,message,tableId, lastX,lastY) {
 			$.ajax({
 				url:urlLink, 
 				type:typeLink,
-				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._top+10, 'lastY': that._left+10}},
+				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._left + 10, 'lastY': that._top + 10}},
 				datatype: 'json',
 				success: function(data){
-					new Note(that._TITLE,that._MESSAGE, data['id'],that._top+10,that._left+10);
+					new Note(that._TITLE,that._MESSAGE, data['id'],that._left + 10,that._top + 10);
 				}
 			});
 		};
@@ -90,19 +106,20 @@ Note = function(title,message,tableId, lastX,lastY) {
 				$('#'+that._noteId).remove();
 			};
 			that._saveButton.onclick = function () {
-				//Updates post object to represent what is in title and message
-				var urlLink = "/posts/"+that._tableId;
-				var typeLink = 'PUT';
-				$.ajax({
-					url:urlLink, 
-					type:typeLink,
-					data: { post:{'title': that._noteTitle.value, 'content': that._noteText.value, 'lastX': that._top+10, 'lastY': that._left+10}},
-					success: function(data){
-					}
-				});
+				that._saveNoteInfo();
 			};
 		}
 	};
 	
 	this._setOnClicks();
+	if(that._noteId !== 'TestNote') {
+	$(that._note).draggable ( {
+		containment: "parent",
+		stop: function(){
+			that._top = $(that._note).offset().top;
+			that._left = $(that._note).offset().left;
+			that._saveNoteInfo();
+		}
+	} );
+	}	
 }
