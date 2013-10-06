@@ -80,6 +80,7 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	//sets all the ajax requests to create delete and update notes
 	this._setOnClicks = function() {
 		that._newButton.onclick = function () {
+			that._depth = $(that._note).css('z-index');
 			var urlLink = "/posts/";
 			var typeLink = 'POST';
 			$.ajax({
@@ -88,6 +89,7 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._left + 10, 'lastY': that._top + 10, 'lastZ': that._depth}},
 				datatype: 'json',
 				success: function(data){
+					that._depth = $(that._note).css('z-index');
 					new Note(that._TITLE,that._MESSAGE, data['id'],that._left + 10,that._top + 10, that._depth);
 				}
 			});
