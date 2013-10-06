@@ -1,5 +1,5 @@
 //physical representation for the note 
-Note = function(title,message,tableId, lastX,lastY) {
+Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	this._TITLE = "Example Title";
 	this._MESSAGE = "Example message";
 	this._closeText = "x";
@@ -7,6 +7,7 @@ Note = function(title,message,tableId, lastX,lastY) {
 	this._newText = "+";
 	this._top = 192;
 	this._left = 221;
+	this._depth = 1;
 	this._noteId = "TestNote";
 	this._tableId = undefined;
 	if(typeof tableId !== "undefined") {
@@ -22,6 +23,10 @@ Note = function(title,message,tableId, lastX,lastY) {
 		this._top = lastY;
 	}
 
+	if(typeof lastZ !== "undefined") {
+		console.log(lastZ);
+		this._depth = lastZ;
+	}
 
 
 	this._note = document.createElement("DIV");
@@ -43,13 +48,8 @@ Note = function(title,message,tableId, lastX,lastY) {
 	$(this._saveButton).addClass("noteButton noteSave");
 
 	this._note.id = this._noteId;
- 	console.log($(that._top));
- 	console.log($(that._left));
 
-	$(this._note).css({top: that._top, left: that._left});
-
- 	console.log($(that._note).offset().top);
- 	console.log($(that._note).offset().left);
+	$(this._note).css({"top": that._top, "left": that._left, "z-index":that._depth});
 
 	this._mainBody.appendChild(this._note);
 	this._contentDiv.appendChild(this._noteTitle);
@@ -72,7 +72,7 @@ Note = function(title,message,tableId, lastX,lastY) {
 				$.ajax({
 					url:urlLink, 
 					type:typeLink,
-					data: { post:{'title': that._noteTitle.value, 'content': that._noteText.value, 'lastX': that._left, 'lastY': that._top}},
+					data: { post:{'title': that._noteTitle.value, 'content': that._noteText.value, 'lastX': that._left, 'lastY': that._top, 'lastZ': that._depth}},
 					success: function(data){
 					}
 				});
@@ -85,10 +85,10 @@ Note = function(title,message,tableId, lastX,lastY) {
 			$.ajax({
 				url:urlLink, 
 				type:typeLink,
-				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._left + 10, 'lastY': that._top + 10}},
+				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._left + 10, 'lastY': that._top + 10, 'lastZ': that._depth}},
 				datatype: 'json',
 				success: function(data){
-					new Note(that._TITLE,that._MESSAGE, data['id'],that._left + 10,that._top + 10);
+					new Note(that._TITLE,that._MESSAGE, data['id'],that._left + 10,that._top + 10, that._depth);
 				}
 			});
 		};
@@ -114,9 +114,13 @@ Note = function(title,message,tableId, lastX,lastY) {
 	if(that._noteId !== 'TestNote') {
 	$(that._note).draggable ( {
 		containment: "parent",
+		cursor: "move",
+		stack:"div",
 		stop: function(){
 			that._top = $(that._note).offset().top;
 			that._left = $(that._note).offset().left;
+			console.log(that._depth+ " "+$(that._note).css("z-index") );
+			that._depth = parseInt($(that._note).css("z-index"));
 			that._saveNoteInfo();
 		}
 	} );

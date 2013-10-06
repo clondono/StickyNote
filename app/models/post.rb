@@ -1,3 +1,10 @@
 class Post < ActiveRecord::Base
-  attr_accessible :content, :name, :title, :lastX, :lastY
+	
+	belongs_to :user
+	
+	def user
+		user
+	end
+ 	
+ 	attr_accessible :content, :name, :title, :lastX, :lastY, :lastZ
 end

@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-StickyNote::Application.config.secret_token = '7a763330af94bf8906d2272b6b26b785e215f766e3d706e89cdbe1dee9e866b5ba9af85b8e9c773b5a8b45014f4845d28d75efaf3e89a8594e5dde171310eea9'
+StickyNote::Application.config.secret_token = 'e9fff8265dc3464929614e46b3aa94efc638a724d71189721c6fc449c086ba324136f6f50f8ebfb14d5d6cba189e5f18fdeddb50550bac20dcdb7a61b9af4dd1'
