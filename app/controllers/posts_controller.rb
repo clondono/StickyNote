@@ -68,6 +68,9 @@ class PostsController < ApplicationController
 
       @user = current_user
       @post = @user.posts.create(params[:post])
+      # not sure if this is correct
+      #@collab = @post.collaborations.create({:post_id => @post.id, :user_id => current_user.id})
+      #@collab.user = current_user;
       respond_to do |format|
         if @post.save
           format.json { render json: @post, status: :created, location: @post }
@@ -90,7 +93,8 @@ class PostsController < ApplicationController
     if user_signed_in?
       
       @post = Post.find(params[:id])
-      if @post.user_id == current_user.id
+      @proj = nil || current_user.projects.find_by_id(@post.id) 
+      if @post.user_id == current_user.id || @proj != nil
         respond_to do |format|
           if @post.update_attributes(params[:post])
             format.html { redirect_to @post, notice: 'Post was successfully updated.' }
@@ -114,21 +118,40 @@ class PostsController < ApplicationController
     
     if user_signed_in?
       @post = Post.find(params[:id])
+      @proj = current_user.projects.find_by_id(@post.id) || nil
 
-      if @post.user_id == current_user.id
+      if current_user == @post.creator
         @post.destroy
 
         respond_to do |format|
           format.html { redirect_to posts_url }
           format.json { head :no_content }
-          formate.js { head :no_content}
+          format.js { head :no_content}
         end
 
-      else
+      elsif @proj != nil
+        current_user.collaborations.find_by_post_id(@post.id).destroy
+        respond_to do |format|
+          format.html { redirect_to posts_url }
+          format.json { head :no_content }
+          format.js { head :no_content}
+        end
+
+      else      
         redirect_to action: 'index'
       end
     else
       redirect_to action: 'index'
     end     
+  end
+
+  # GET /posts/shared
+  def shared
+    @posts = Post.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @posts }
+    end
   end
 end

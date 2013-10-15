@@ -1,17 +1,63 @@
 <% if user_signed_in? %>
 	<!--create a sample note that never disappears so users always see it-->
-	<script type="text/javascript"> 
-		var csrf_token = "<%= escape_javascript csrf_meta_tags%>";
-		new Note("Example Title","Example message");
-	</script>
+		<button class="btn" id="addNote"  type="button" value="add" style="width:70px; margin:5px" > + note </button>
+		<div class="control-group" style="margin:5px;float:right">
+			<div class="btn-group" data-toggle="buttons-radio" data-toggle-name="checkbox_group">
+				<button class="btn" id="chkbox1"  type="button" value="list" style="width:60px" > List </button>
+				<button class="btn active" id="chkbox2"  type="button" value="notes" style="width:60px" checked> Notes </button>
+			</div>
+			<input type="hidden" name="checkbox_group" value="1"/>
+		</div>
+		<script>	
+		$("#addNote").click(function(){
+			var urlLink = "/posts/";
+			var typeLink = 'POST';
+			$.ajax({
+				url:urlLink, 
+				type:typeLink,
+				data: { post:{'title': "Example Title", 'content': "Example message", 'lastX': 267, 'lastY': 232, 'lastZ': 1}},
+				datatype: 'json',
+				success: function(data){
+					new Note("Example Title","Example message", data['id']);
+				}
+			});
+			});
+		$("#chkbox1").click(function(){
+			$("#noteContainer").css("visibility","hidden");
+			$("#listContainer").css("visibility","visible");
 
-	<!-- iterates through the posts and creates post its for all the posts in db-->
+		});
+		$("#chkbox2").click(function(){
+			$("#noteContainer").css("visibility","visible");
+			$("#listContainer").css("visibility","hidden");
 
-	<% current_user.posts.each do |post| %>
-		<script type="text/javascript">
-			new Note("<%= j post.title %>","<%= j post.content %>", <%= post.id%>, <%= post.lastX %>, <%= post.lastY %>,<%= post.lastZ %>);
-			console.log('<%=post.id%>');
+		});
 		</script>
-		<% end %>
+	<div id ="noteContainer"style="margin:0px;height:100%;width:100%;">
 
+		<!-- iterates through the posts and creates post its for all the posts in db-->
+
+		<% current_user.posts.each do |post| %>
+			<script type="text/javascript">
+				new Note("<%= j post.title %>","<%= j post.content %>", <%= post.id%>, <%= post.lastX %>, <%= post.lastY %>,<%= post.lastZ %>);
+				console.log('<%= post.id%>');
+			</script>
+		<% end %>
+	</div>
+	<div id="listContainer" style="margin-top:-1000px;visibility:hidden">
+		<table class="table table-bordered">
+		    <tr>
+		    	<th>Title</th>
+		    	<th>Content</th>
+		        <th></th>
+		    </tr>
+			<% current_user.posts.each do |post| %>
+			<tr>
+	          <td><%= post.title %></td>
+	          <td><%= h post.content %></td>
+	          <td></td>
+			</tr>
+			<% end %>
+    	</table>
+	</div>
 <% end %>

@@ -12,6 +12,8 @@
 	text-align: center;
 	display: inline-block;
 	background-color: transparent;
+	left: 43px;
+	top: 12px;
 }
 
 .noteText {
@@ -30,6 +32,10 @@
 	margin-top: 15px;
 }
 
+.noteContainer {
+	height:100%;
+	width: 100%;
+}
 
 .noteButton {
 	background-color: transparent;
@@ -45,6 +51,11 @@
 	top: 11px;
 }
 .noteNew {
+	top: 12px;
+	left: 12px;
+}
+
+.noteShare {
 	top: 255px;
-	left: 259px;
+	left: 230px;
 }

@@ -5,8 +5,9 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	this._closeText = "x";
 	this._saveText = "save";
 	this._newText = "+";
-	this._top = 192;
-	this._left = 221;
+	this._shareText = "share";
+	this._top = 232;
+	this._left = 267;
 	this._depth = 1;
 	this._noteId = "TestNote";
 	this._tableId = undefined;
@@ -24,7 +25,6 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	}
 
 	if(typeof lastZ !== "undefined") {
-		console.log(lastZ);
 		this._depth = lastZ;
 	}
 
@@ -32,20 +32,23 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	this._note = document.createElement("DIV");
 	this._noteTitle = document.createElement("INPUT");
 	this._contentDiv = document.createElement("DIV");
-	this._noteText = document.createElement("TEXTAREA");
+	this._noteText = document.createElement("TEXTAREA");	
+	this._shareButton = document.createElement("BUTTON");
 	this._closeButton = document.createElement("BUTTON");
 	this._newButton = document.createElement("BUTTON");
 	this._saveButton = document.createElement("BUTTON");
-	this._mainBody = document.getElementById('mainThing');
+	this._mainBody = document.getElementById('noteContainer');
 	var that = this;
 
 	$(this._note).addClass("note");
 	$(this._noteTitle).addClass("noteTitle");
 	$(this._noteText).addClass("noteText");
-	$(this._contentDiv).addClass("noteContent")
-	$(this._closeButton).addClass("noteButton noteClose");
+	$(this._contentDiv).addClass("noteContent");
 	$(this._newButton).addClass("noteButton noteNew");
+	$(this._closeButton).addClass("noteButton noteClose");
 	$(this._saveButton).addClass("noteButton noteSave");
+	$(this._shareButton).addClass("noteButton noteShare");
+
 
 	this._note.id = this._noteId;
 
@@ -56,6 +59,7 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	this._contentDiv.appendChild(this._closeButton);
 	this._contentDiv.appendChild(this._noteText);
 	this._contentDiv.appendChild(this._saveButton);
+	this._contentDiv.appendChild(this._shareButton);
 	this._contentDiv.appendChild(this._newButton);
 	this._note.appendChild(this._contentDiv);
 	this._noteTitle.value = title;
@@ -63,6 +67,7 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 	this._closeButton.innerText = this._closeText;
 	this._newButton.innerText = this._newText;
 	this._saveButton.innerText = this._saveText;
+	this._shareButton.innerText = this._shareText;
 	this._newButton.id = 'NEWBUTTON';
 
 	this._saveNoteInfo = function() {
@@ -86,11 +91,11 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 			$.ajax({
 				url:urlLink, 
 				type:typeLink,
-				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._left + 10, 'lastY': that._top + 10, 'lastZ': that._depth}},
+				data: { post:{'title': that._TITLE, 'content': that._MESSAGE, 'lastX': that._left + 50, 'lastY': that._top + 50, 'lastZ': that._depth}},
 				datatype: 'json',
 				success: function(data){
 					that._depth = $(that._note).css('z-index');
-					new Note(that._TITLE,that._MESSAGE, data['id'],that._left + 10,that._top + 10, that._depth);
+					new Note(that._TITLE,that._MESSAGE, data['id'],that._left + 50,that._top + 50, that._depth);
 				}
 			});
 		};
@@ -106,8 +111,21 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 
 				$('#'+that._noteId).remove();
 			};
-			that._saveButton.onclick = function () {
+			that._saveButton.onclick = function() {
 				that._saveNoteInfo();
+			};
+			that._shareButton.onclick = function(argument) {
+			var userEmail = window.prompt("Input the email for the user you want to collaborate with.","");
+			var urlLink = "/collaboration/create";
+			$.ajax({
+					url: urlLink,
+					type:'POST',
+					data: { 'post_id': that._tableId, 'email':userEmail},
+					datatype: 'json',
+					success: function(data){
+						
+				}
+				});
 			};
 		}
 	};
@@ -121,7 +139,6 @@ Note = function(title,message,tableId, lastX,lastY, lastZ) {
 		stop: function(){
 			that._top = $(that._note).offset().top;
 			that._left = $(that._note).offset().left;
-			console.log(that._depth+ " "+$(that._note).css("z-index") );
 			that._depth = parseInt($(that._note).css("z-index"));
 			that._saveNoteInfo();
 		}

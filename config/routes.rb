@@ -1,6 +1,13 @@
 StickyNote::Application.routes.draw do
-  devise_for :users
 
+  get "collaboration" => 'collaboration#index'
+
+  match "collaboration/create" => 'collaboration#create'
+
+  match "collaboration/destroy" => 'collaboration#destroy'
+
+  devise_for :users
+ 
   resources :posts
 
 
