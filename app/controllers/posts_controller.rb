@@ -15,7 +15,7 @@ class PostsController < ApplicationController
   def show
     if user_signed_in?
 
-        @post = Post.find(params[:id])
+      @post = current_user.posts.find(params[:id])
         
         if @post.user_id == current_user.id
           respond_to do |format|
@@ -35,8 +35,7 @@ class PostsController < ApplicationController
   def new
     if user_signed_in?
 
-      @post = Post.new
-
+      @post = current_user.posts.new
       respond_to do |format|
         format.html # new.html.erb
         format.json { render json: @post }
@@ -51,7 +50,7 @@ class PostsController < ApplicationController
   def edit
     if user_signed_in?
 
-      @post = Post.find(params[:id])
+      @post = current_user.posts.find(params[:id])
       if @post.user_id == current_user.id
       else
         redirect_to action: 'index'
@@ -92,7 +91,7 @@ class PostsController < ApplicationController
   def update
     if user_signed_in?
       
-      @post = Post.find(params[:id])
+      @post = current_user.posts.find(params[:id])
       @proj = nil || current_user.projects.find_by_id(@post.id) 
       if @post.user_id == current_user.id || @proj != nil
         respond_to do |format|
@@ -117,7 +116,7 @@ class PostsController < ApplicationController
   def destroy
     
     if user_signed_in?
-      @post = Post.find(params[:id])
+      @post = current_user.posts.find(params[:id])
       @proj = current_user.projects.find_by_id(@post.id) || nil
 
       if current_user == @post.creator
@@ -143,15 +142,5 @@ class PostsController < ApplicationController
     else
       redirect_to action: 'index'
     end     
-  end
-
-  # GET /posts/shared
-  def shared
-    @posts = Post.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @posts }
-    end
   end
 end
